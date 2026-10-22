@@ -823,7 +823,7 @@ function needs(sid){const out=[];const a=S.att.filter(x=>x.sid==sid&&(!since(sid
   const e=examList(sid);if(e.length>=2&&e[e.length-1].pct<=e[e.length-2].pct-15)out.push('انخفضت درجاته في آخر امتحان');return out}
 const hue=s=>`hsl(${s.hue} 62% 58%)`;
 const av=(s,c='')=>`<div class="av ${c}" style="background:${hue(s)}">${esc((LANG=='en'?tr1(s.name):s.name)[0])}</div>`;
-function qrSvg(s){try{const q=qrcode(0,'M');q.addData('STU:'+s.code);q.make();return q.createSvgTag({cellSize:4,margin:0,scalable:true})}catch(e){return '<div class="small center">QR</div>'}}
+function qrSvg(s){try{const q=qrcode(0,'M');q.addData('STU:'+s.code);q.make();return q.createSvgTag({cellSize:4,margin:4,scalable:true})}catch(e){return '<div class="small center">QR</div>'}}
 function upsert(arr,fn,obj){const i=arr.findIndex(fn);if(i>=0)arr[i]=Object.assign(arr[i],obj);else arr.push(obj)}
 function notify(sid,text,both=true){const b={text,date:today(),time:nowT()};S.notifs.push(Object.assign({id:uid('n'),to:'p:'+sid},b));if(both)S.notifs.push(Object.assign({id:uid('n'),to:'s:'+sid},b))}
 const can=p=>me().role=='teacher'||S.perms[p];
@@ -1069,7 +1069,7 @@ function syncExam(){const c=U.sc;if(!c)return;const z=S.examScores.find(x=>x.sid
 function findByCode(txt){const c=String(txt).replace(/^STU:/i,'').trim();return S.students.find(s=>s.code==c)}
 V.scan=()=>{
   const c=U.sc;const s=c?st(c.sid):null;
-  const cam=`<div class="cam">${U.cam?'<video id="cam" playsinline muted></video>':'<div class="center" style="padding:20px"><p>وجّه الكاميرا نحو كود الطالب</p><button class="btn pri" data-act="camOn">تشغيل الكاميرا</button></div>'}</div>
+  const cam=`<div class="cam">${U.cam?'<video id="cam" autoplay playsinline muted></video>':'<div class="center" style="padding:20px"><p>وجّه الكاميرا نحو كود الطالب</p><button class="btn pri" data-act="camOn">تشغيل الكاميرا</button></div>'}</div>
   ${U.cam?'<button class="btn sm" data-act="camOff" style="margin-bottom:10px">إيقاف الكاميرا</button>':''}
   <div class="row"><input type="text" id="manual" class="grow" placeholder="أو اكتب كود الطالب (مثال 1025)" inputmode="numeric" data-bind="manual"><button class="btn pri" data-act="manual">بحث</button></div>`;
   let card='';
@@ -1245,9 +1245,29 @@ function pgEnter(){
   if(k===U._vk)return;U._vk=k;
   const mn=document.querySelector('main.wrap');if(!mn)return;mn.classList.add('enter');countUps(mn)}
 /* camera */
-async function camOn(){try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}});U.cam=true;clearInterval(timer);timer=setInterval(tick,300);render()}catch(e){toast('تعذر تشغيل الكاميرا. استخدم إدخال الكود يدويًا.')}}
+async function camOn(){
+  if(!navigator.mediaDevices||!navigator.mediaDevices.getUserMedia){toast(window.isSecureContext?'المتصفح لا يدعم الكاميرا. اكتب الكود يدويًا.':'الكاميرا تعمل فقط على رابط https. افتح الموقع من رابط آمن أو اكتب الكود يدويًا.');return}
+  try{
+    try{stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720}}})}
+    catch(e){stream=await navigator.mediaDevices.getUserMedia({video:true})}
+    U.cam=true;clearInterval(timer);timer=setInterval(tick,250);render()
+  }catch(e){const n=e&&e.name;toast(n=='NotAllowedError'||n=='SecurityError'?'اسمح للموقع باستخدام الكاميرا من إعدادات المتصفح ثم أعد المحاولة.':n=='NotFoundError'?'لا توجد كاميرا في هذا الجهاز.':'تعذر تشغيل الكاميرا. استخدم إدخال الكود يدويًا.')}
+}
 function stopCam(){clearInterval(timer);if(stream){stream.getTracks().forEach(t=>t.stop());stream=null}U.cam=false}
-function tick(){const v=$('#cam');if(!stream||!v||v.readyState<2||!window.jsQR||!v.videoWidth)return;const c=document.createElement('canvas');c.width=v.videoWidth;c.height=v.videoHeight;const x=c.getContext('2d',{willReadFrequently:true});x.drawImage(v,0,0);const d=x.getImageData(0,0,c.width,c.height);const r=jsQR(d.data,d.width,d.height);if(r&&r.data){const s=findByCode(r.data);if(s&&(!U.sc||U.sc.sid!=s.id)){try{navigator.vibrate&&navigator.vibrate(60)}catch(e){}openScan(s.id)}}}
+let _bd=null,_warned=false;
+function onCode(txt){const s=findByCode(txt);if(s&&(!U.sc||U.sc.sid!=s.id)){try{navigator.vibrate&&navigator.vibrate(60)}catch(e){}openScan(s.id)}}
+async function tick(){
+  const v=$('#cam');if(!stream||!v||v.readyState<2||!v.videoWidth||tick.b)return;tick.b=1;
+  try{
+    if('BarcodeDetector' in window){try{_bd=_bd||new BarcodeDetector({formats:['qr_code']});const r=await _bd.detect(v);if(r&&r[0]&&r[0].rawValue){onCode(r[0].rawValue);return}}catch(e){_bd=null}}
+    if(!window.jsQR){if(!_warned&&!('BarcodeDetector' in window)){_warned=true;toast('تعذر تحميل مكتبة قراءة الكود. تأكد من الإنترنت أو اكتب الكود يدويًا.')}return}
+    const k=Math.min(1,720/Math.max(v.videoWidth,v.videoHeight)),w=Math.round(v.videoWidth*k),h=Math.round(v.videoHeight*k);
+    const c=tick.c||(tick.c=document.createElement('canvas'));c.width=w;c.height=h;
+    const x=c.getContext('2d',{willReadFrequently:true});x.drawImage(v,0,0,w,h);
+    const d=x.getImageData(0,0,w,h),r=jsQR(d.data,w,h,{inversionAttempts:'attemptBoth'});
+    if(r&&r.data)onCode(r.data);
+  }catch(e){console.warn('scan',e)}finally{tick.b=0}
+}
 
 /* csv */
 async function csv(name,table){let dl=null;try{dl=window.claude&&await window.claude.use('downloads')}catch(e){}

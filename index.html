@@ -573,6 +573,147 @@ body.tch .thero .btn.pri{background:#fff;color:var(--accent);border-color:#fff;b
 .lsw button.on{background:var(--accent);color:#fff}
 .ttop{background:rgba(243,247,253,.86)}
 @media (max-width:760px){.lsw button{padding:5px 10px}}
+
+/* ===== RESPONSIVE v3: هاتف / تابلت / لابتوب ===== */
+html,body{max-width:100%;overflow-x:hidden}
+.grow,.card,.stat,.tile,.hbtn,.lrow,.item,.wk{min-width:0}
+.scroll{-webkit-overflow-scrolling:touch}
+table{min-width:460px}
+.ov{padding:0}
+.sheet{overscroll-behavior:contain}
+
+/* ---------- هاتف (حتى 600px) ---------- */
+@media (max-width:600px){
+ body{font-size:15.5px}
+ body.lux .wrap{padding:14px 12px 118px}
+ body.lux .bar{padding:10px 12px}
+ body.lux .bar b{font-size:1.1rem}
+ .hb{gap:4px}.ib{width:38px;height:38px}
+ body.lux .hero{padding:22px 18px;border-radius:24px}
+ body.lux .hero h2{font-size:1.8rem}
+ body.lux .grid{grid-template-columns:repeat(2,1fr)}
+ body.lux .card{padding:16px;border-radius:18px}
+ .hub{grid-template-columns:1fr 1fr;gap:10px}
+ .hub.h3 .hbtn:last-child{grid-column:1/-1}
+ .hbtn{min-height:136px;padding:14px;border-radius:22px}
+ .hbtn b{font-size:1.15rem}.hbtn small{font-size:.78rem}
+ .sub2{grid-template-columns:1fr 1fr;gap:10px}
+ .bnav{left:8px;right:8px;max-width:none;padding:5px;border-radius:22px}
+ .bnav button{font-size:.66rem;min-height:52px}
+ .idc-b{justify-content:center}.idc-q{width:170px;height:170px}
+ .qx .qopts,.qx.qv0 .qopts,.qx.qv2 .qopts,.qx.qv4 .qopts{grid-template-columns:1fr}
+ .qx .qtext{font-size:1.2rem}
+ .lhero{padding:20px 16px;border-radius:22px}.lhero h2{font-size:1.5rem}
+ .login{margin:3vh 10px 0!important;padding:26px 16px!important}
+ /* لوحة المدرس */
+ body.tch .tmain .wrap{padding:14px 10px 70px}
+ .ttop{padding:8px 10px;gap:8px}.ttitle{font-size:1.05rem}
+ .lsw button{padding:4px 9px;font-size:.78rem}
+ .thero{padding:18px 16px;border-radius:20px}.thero h2{font-size:1.4rem}
+ .tquick{width:100%}.tquick .btn{flex:1 1 100%}
+ body.tch .grid{grid-template-columns:1fr 1fr;gap:10px}
+ body.tch .stat b{font-size:1.6rem}
+ body.tch .card{padding:14px;border-radius:16px}
+ .asr{align-items:flex-start}.asr .pwin{min-width:100%;flex-basis:100%}
+ .pfr .pfa{width:100%}
+ .row.sp{gap:8px}
+ .ov{align-items:flex-end}
+ .sheet{max-width:100%;border-radius:20px 20px 0 0;max-height:94vh}
+ #rpov{padding:0!important;align-items:flex-end!important}
+ #rpov .sheet{border-radius:20px 20px 0 0!important;max-height:96vh!important;padding:12px!important}
+ .cards4{grid-template-columns:1fr 1fr}
+ .ticket .top{padding:12px}
+ .ticket .body{padding:12px}
+ #pdfv .pvh{flex-wrap:wrap}
+}
+
+/* ---------- تابلت (601px - 1024px) ---------- */
+@media (min-width:601px) and (max-width:1024px){
+ body{font-size:16.5px}
+ body.lux .wrap,body.lux .bar{max-width:800px}
+ body.lux .wrap{padding:24px 22px 128px}
+ body.lux .hero{padding:32px 30px}
+ body.lux .hero h2{font-size:2.6rem}
+ body.lux .grid{grid-template-columns:repeat(4,1fr)}
+ .hub{grid-template-columns:1fr 1fr;gap:16px}
+ .hub.h3{grid-template-columns:repeat(3,1fr)}
+ .hub.h3 .hbtn:last-child{grid-column:auto;min-height:172px}
+ .hbtn{min-height:190px;padding:22px}
+ .hbtn b{font-size:1.5rem}
+ .sub2{gap:16px}
+ .bnav{max-width:640px;bottom:calc(16px + env(safe-area-inset-bottom,0px))}
+ .bnav button{font-size:.82rem}
+ .qx .qopts{grid-template-columns:1fr 1fr}
+ .idc{max-width:620px;margin-inline:auto;margin-bottom:16px}
+ /* مودال في المنتصف بدل الشيت السفلي */
+ .ov{align-items:center;padding:20px}
+ .sheet,body.tch .sheet{max-width:680px;border-radius:24px;max-height:90vh;border-top:0}
+ /* المدرس */
+ body.tch .tmain .wrap{max-width:900px;padding:22px 22px 80px}
+ body.tch .grid{grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+ .thero{padding:24px 26px}
+ .cards4{grid-template-columns:repeat(3,1fr)}
+}
+/* تابلت عرضي: القائمة الجانبية ثابتة */
+@media (min-width:901px) and (max-width:1024px){
+ .tside{width:232px}
+ .tnv{padding:9px 10px;font-size:.95rem}
+}
+
+/* ---------- لابتوب / ديسكتوب (1025px فأكثر) ---------- */
+@media (min-width:1025px){
+ body{font-size:17px}
+ body.lux .wrap,body.lux .bar{max-width:1120px}
+ body.lux .wrap{padding:30px 28px 130px}
+ body.lux .bar{padding:14px 28px}
+ body.lux .hero{padding:38px 40px;border-radius:32px}
+ body.lux .hero h2{font-size:2.9rem}
+ body.lux .card{padding:26px}
+ body.lux .grid{grid-template-columns:repeat(4,1fr)}
+ .hub{grid-template-columns:repeat(4,1fr);gap:18px}
+ .hub.h3{grid-template-columns:repeat(3,1fr)}
+ .hub.h3 .hbtn:last-child{grid-column:auto;min-height:190px}
+ .hbtn{min-height:210px;padding:24px}
+ .hbtn:hover{transform:translateY(-4px);box-shadow:0 30px 48px -26px rgba(10,16,32,.85)}
+ .sub2{max-width:560px}
+ .bnav{max-width:680px;bottom:20px}
+ .bnav button:hover{background:rgba(255,255,255,.08)}
+ .lrow:hover,.btn:hover{cursor:pointer}
+ .lrow{padding:18px 22px}
+ .qx{max-width:880px;margin-inline:auto;margin-bottom:16px}
+ .qx .qopts{grid-template-columns:1fr 1fr}
+ .qres{max-width:760px;margin-inline:auto;margin-bottom:16px}
+ .idc{max-width:640px;margin-inline:auto;margin-bottom:16px}
+ .lhero{padding:30px 32px}
+ body.lux .login{max-width:480px}
+ .ov{align-items:center;padding:24px}
+ .sheet,body.tch .sheet{max-width:720px;border-radius:26px;max-height:88vh;border-top:0}
+ /* المدرس */
+ body.tch .tmain .wrap{max-width:1280px;padding:28px 34px 80px}
+ .ttop{padding:16px 34px}
+ body.tch .grid{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+ .thero{padding:30px 34px}.thero h2{font-size:2.1rem}
+ body.tch .card{padding:24px}
+ body.tch .item:hover{background:var(--soft)}
+ .cards4{grid-template-columns:repeat(4,1fr)}
+ table{min-width:0}
+}
+
+/* شاشات واسعة جدًا */
+@media (min-width:1500px){
+ body.lux .wrap,body.lux .bar{max-width:1240px}
+ body.tch .tmain .wrap{max-width:1400px}
+}
+
+/* هاتف بالعرض (ارتفاع صغير) */
+@media (max-height:480px) and (orientation:landscape){
+ .bnav button{min-height:44px;flex-direction:row;justify-content:center;gap:6px}
+ body.lux .wrap{padding-bottom:84px}
+ .ov{align-items:center}.sheet{max-height:96vh;border-radius:16px}
+}
+
+/* طباعة: إلغاء تأثيرات التجاوب */
+@media print{.sheet,body.tch .sheet{max-width:none!important}}
 </style>
 </head>
 <body>
